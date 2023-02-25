@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+<style>
+  .dashboard  {
+    background-color: black;
+    color:white;
+    width: 100%;
+    height:50px;
+  
+  
+    display: flex;
+    justify-content: space-around;
+    justify-content: flex-start;
+  
+    
+    margin:0;
+   
+  }
+
+table {
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid black;
+  padding: 5px;
+}
+
+
+
+#createRowBtn{
+    background-color: black;
+    color:white;
+   
+}
+
+#saveBtn {
+    background-color: black;
+    color:white; 
+}
+
+</style>
+
+</head>
+<body>
+
+    <div class="dashboard">
+
+        <h3>Dashboard</h3>
+
+    </div> <br> 
+
+    <button id="createRowBtn">Add A new Row</button>  <br> <br>
+
+    
+    
+    <table id="myTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Student Name</th>
+            <th>Student Roll</th>
+            <th>Subject</th>
+            <th>Marks</th>
+            <th>Marked By</th>
+            
+          </tr>
+        </thead>
+
+       
+
+        <tbody>
+      
+        </tbody>
+      </table>
+    <br> <br>
+      <button id="saveBtn"> save </button>  
+      
+   
+<script>
+
+let tableData = [];
+
+const tableBody = document.querySelector("#myTable tbody");
+const createRowBtn = document.querySelector("#createRowBtn");
+
+
+
+let idCounter = 1;
+
+function createNewRow() {
+  const newRow = document.createElement("tr");
+  newRow.innerHTML = `
+    <td>${idCounter}</td>
+    <td><input type="text" name="student_name" required></td>
+    <td><input type="text" name="student_roll" required></td>
+    <td><input type="text" name="subject" required></td>
+    <td><input type="number" name="marks" required></td>
+    <td><input type="email" name="markedBy" required></td>
+ 
+
+
+    
+  `;
+
+
+
+
+
+// // NOW CREATE AN INPUT BOX TYPE BUTTON USING createElement() METHOD.
+
+
+
+// savebtn.innerHTML = document.createElement('input');
+
+// // SET INPUT ATTRIBUTE 'type' AND 'value'.
+// button.setAttribute('type', 'button');
+// button.setAttribute('value', 'save');
+
+// // ADD THE BUTTON's 'onclick' EVENT.
+// button.setAttribute('onclick', 'saveData()');
+
+// // FINALLY ADD THE NEWLY CREATED TABLE AND BUTTON TO THE BODY.
+
+// document.body.appendChild(button);
+
+
+
+
+//   const savebtn =document.getElementsByClassName ("save") //th//
+
+//   savebtn.innerHTML = document.createElement("button")
+//   btn.setAttribute ("id", "saveBtn")
+//   btn.innerHTML = "save"
+//   document.body.append(btn)
+
+  
+  
+  
+ tableBody.appendChild(newRow);
+  idCounter++;
+}
+
+
+const saveBtn = document.querySelector("#saveBtn");
+createRowBtn.addEventListener("click", createNewRow);
+
+saveBtn.addEventListener("click", saveData);
+
+function saveData() {
+
+    const rows = document.querySelectorAll("#myTable tbody tr");
+    const newData = [];
+    let isValid = true;
+    rows.forEach((row) => {
+      const inputs = row.querySelectorAll("input");
+      const rowData = {};
+      inputs.forEach((input) => {
+        if (input.name === "marks") {
+          if (isNaN(input.value)) {
+            alert("Marks should be a number");
+            isValid = false;
+          } else {
+            rowData[input.name] = Number(input.value);
+          }
+        } else if (input.name === "markedBy") {
+          if (!validateEmail(input.value)) {
+            alert("Please enter a valid email address for markedBy");
+            isValid = false;
+          } else {
+            rowData[input.name] = input.value;
+          }
+        } else {
+          if (input.value === "") {
+            alert("Please fill in all fields");
+            isValid = false;
+          } else {
+            rowData[input.name] = input.value;
+          }
+        }
+      });
+      if (Object.keys(rowData).length > 0) {
+        newData.push({ id: row.cells[0].textContent, ...rowData });
+      }
+    });
+    if (isValid) {
+      tableData = newData;
+      console.log(tableData);
+      console.log("Table content:", tableBody.innerHTML);
+    }
+  }
+  
+  function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+  
+
+ 
+ 
+
+
+</script>
+
+
+
+
+
+
+
+    
+</body>
+</html>
